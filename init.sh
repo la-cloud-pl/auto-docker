@@ -24,7 +24,7 @@ trap error_trap ERR
 # Config:
 REPO_USER="la-cloud-pl"
 REPO_NAME="auto-docker"
-RELEASE_TAG="v1.0.0"
+RELEASE_TAG="v0.0.1-alpha"
 INSTALL_DIR="$HOME/${REPO_NAME}"
 INSTALL_SCRIPT="src/docker-install.sh"  # Relative to repo root
 
