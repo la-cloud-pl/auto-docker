@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Skrypt stworzony do pełnej instalacji dockera na nowym systemie Debian!
- 
+# ---------------------------
+# The script allows you to install the newest version of Docker and Docker Compose on your system. Right now you can use it only on Debian.\
+# To run the script or get more information about it's purpose please run init.sh as root in the project root directory.
+# ---------------------------
+
 # Log color.
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -16,10 +19,11 @@ log ()
 # Quit on error:
 set -e
 error_trap() {
-    printf "${RED}Error in the init process, the instance will shut down now...${NC}" && shutdown now
+    printf "${RED}Error in the init process, the instance will shut down now...${NC}"
 }
 trap error_trap ERR
 
+# Check if you're root user.
 root_check() {
     if [ `whoami` != 'root' ]; then
         echo "You must be root to do this, exiting ..."
@@ -27,6 +31,15 @@ root_check() {
     fi
 }
 
+# Check operating system, quit if not Debian.
+system_check() {
+        if [ `cat /etc/os-release | grep "ID" | grep "debian"` != 'ID=debian' ]; then
+        echo "The script runs only on Debian system, exiting ..."
+        exit 1
+    fi
+}
+
+# Update packages on your system.
 update_system() {
     log "Starting Docker installation ..."
     log "Updating the system ..."
@@ -36,6 +49,7 @@ update_system() {
     log "System updated and upgraded successfully!"
 }
 
+# Delete old Docker versions.
 delete_docker() {
     log "Removing old Docker packages ..."
     for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do
@@ -54,6 +68,7 @@ docker_gpg() {
     log "Docker's official GPG key added successfully!"
 }
 
+# Install Docker.
 install_docker() {
     log "Adding Docker repository to Apt sources ..."
     echo \
@@ -67,6 +82,7 @@ install_docker() {
     log "Docker installed successfully!"
 }
 
+# Install Docker Compose.
 install_docker_compose() {
     log " Installing Docker Compose ..."
     curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -75,8 +91,10 @@ install_docker_compose() {
     log "Docker and Docker Compose installed successfully!"
 }
 
-main_function() {
+# Main:
+main() {
     root_check
+    system_check
     update_system
     delete_docker
     docker_gpg
@@ -85,4 +103,4 @@ main_function() {
 }
 
 # Run the main function:
-main_function
+main
