@@ -1,8 +1,9 @@
-# 🚀 auto-docker
 [![GitHub release](https://img.shields.io/github/v/release/la-cloud-pl/auto-docker?style=flat-square)](https://github.com/la-cloud-pl/auto-docker/releases)
 [![License: MIT](https://img.shields.io/github/license/la-cloud-pl/auto-docker?style=flat-square)](LICENSE)
 [![Issues](https://img.shields.io/github/issues/la-cloud-pl/auto-docker?style=flat-square)](https://github.com/la-cloud-pl/auto-docker/issues)
 [![Pull Requests](https://img.shields.io/github/issues-pr/la-cloud-pl/auto-docker?style=flat-square)](https://github.com/la-cloud-pl/auto-docker/pulls)
+
+# 🚀 auto-docker
 **auto-docker** is a lightweight shell-based automation tool that helps you install and configure Dockerized environments quickly and consistently with zero hassle.
 This project is ideal for servers, virtual machines, or development setups where you want Docker ready in one shot.
 **❌ Currently works only on Debian 12 systems.**
