@@ -46,13 +46,19 @@ main() {
     log "Extracting archive..."
     unzip -q "$TMP_DIR/repo.zip" -d "$TMP_DIR"
 
-    EXTRACTED_DIR="${TMP_DIR}/${REPO_NAME}-${RELEASE_TAG}"
+    # Strip leading 'v' if present
+    CLEAN_TAG="${RELEASE_TAG#v}"
+    EXTRACTED_DIR="${TMP_DIR}/${REPO_NAME}-${CLEAN_TAG}"
+
+    if [[ ! -d "$EXTRACTED_DIR" ]]; then
+        log "❌ Error: Expected extracted directory '${EXTRACTED_DIR}' not found."
+        exit 1
+    fi
 
     log "Installing to ${INSTALL_DIR}..."
     rm -rf "$INSTALL_DIR"
     mv "$EXTRACTED_DIR" "$INSTALL_DIR"
 
-    # Set Permissions and Run Installer:
     log "Setting executable permissions for ${INSTALL_SCRIPT}..."
     chmod +x "${INSTALL_DIR}/${INSTALL_SCRIPT}"
 
