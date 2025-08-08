@@ -24,7 +24,7 @@ trap error_trap ERR
 # Config:
 REPO_USER="la-cloud-pl"
 REPO_NAME="auto-docker"
-RELEASE_TAG="v0.0.1-alpha"
+RELEASE_TAG=""
 INSTALL_DIR="$HOME/${REPO_NAME}"
 INSTALL_SCRIPT="src/docker-install.sh"  # Relative to repo root
 
@@ -33,6 +33,24 @@ if [ "$EUID" -ne 0 ]; then
   echo -e "${RED}❌ This script must be run as root. Exiting.${NC}"
   exit 1
 fi
+
+# Fetch latest release tag from GitHub
+fetch_latest_release_tag() {
+    log "Fetching latest release tag from GitHub..."
+    API_URL="https://api.github.com/repos/${REPO_USER}/${REPO_NAME}/releases/latest"
+    
+    RESPONSE=$(curl -s "$API_URL")
+    
+    # Extract tag_name from the JSON response
+    RELEASE_TAG=$(echo "$RESPONSE" | grep -oP '"tag_name":\s*"\K(.*)(?=")')
+
+    if [[ -z "$RELEASE_TAG" ]]; then
+        log "❌ Failed to fetch latest release tag."
+        exit 1
+    fi
+
+    log "Latest release tag is: ${RELEASE_TAG}"
+}
 
 # Main function - Download and Extract Release:
 main() {
@@ -67,6 +85,9 @@ main() {
 
     log "✅ Installation complete!"
 }
+
+# Run dynamic fetch of latest release tag
+fetch_latest_release_tag
 
 # Running the main function:
 main
